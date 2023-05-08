@@ -1,8 +1,8 @@
 import os
-from typing import Dict, Tuple, Union, Optional
+from typing import Dict, Union, Optional
 
 from torch.nn import Module
-from transformers import AutoModel
+from transformers import AutoModel, AutoTokenizer
 
 
 def auto_configure_device_map(num_gpus: int) -> Dict[str, int]:
@@ -52,3 +52,9 @@ def load_model_on_gpus(checkpoint_path: Union[str, os.PathLike], num_gpus: int =
     return model
 
 
+def get_model():
+    model_name_or_path = os.getenv("GLM_MODEL_NAME_OR_PATH", "THUDM/chatglm-6b-int4")
+    cache_path = os.getenv("GLM_CACHE_PATH", "./cache")
+    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, cache_path=cache_path, trust_remote_code=True)
+    model = AutoModel.from_pretrained(model_name_or_path, cache_path=cache_path, trust_remote_code=True).half().cuda()
+    return tokenizer, model
