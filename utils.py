@@ -55,6 +55,6 @@ def load_model_on_gpus(checkpoint_path: Union[str, os.PathLike], num_gpus: int =
 def get_model():
     model_name_or_path = os.getenv("GLM_MODEL_NAME_OR_PATH", "THUDM/chatglm-6b-int4")
     cache_path = os.getenv("GLM_CACHE_PATH", "./cache")
-    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, cache_path=cache_path, trust_remote_code=True)
-    model = AutoModel.from_pretrained(model_name_or_path, cache_path=cache_path, trust_remote_code=True).half().cuda()
+    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, cache_dir=cache_path, trust_remote_code=True)
+    model = AutoModel.from_pretrained(model_name_or_path, cache_dir=cache_path, trust_remote_code=True).half().cuda()
     return tokenizer, model
